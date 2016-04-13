@@ -1,0 +1,51 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:jaxws="http://cxf.apache.org/jaxws"
+	xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd http://cxf.apache.org/jaxws http://cxf.apache.org/schemas/jaxws.xsd">
+	
+	<!-- jar包中自带的cxf文件夹下的*.xml文件 -->
+	<import resource="classpath:META-INF/cxf/cxf.xml" />
+	<!-- 未知为何找不以下两个自带文件 -->
+	<!-- <import resource="classpath:META-INF/cxf/cxf-extension-soap.xml" /> -->
+	<!-- <import resource="classpath:META-INF/cxf/cxf-servlet.xml" /> -->
+	 
+	<!-- 配置服务端方法所在的类及数字签名 -->
+	<jaxws:endpoint id="TestWebService" implementor="org.goffee.cxf.server.services.impl.TestWebServiceImpl"
+		address="/wstest">
+		
+		<!-- 通过拦截器对客户端发送的数据和签名进行解密处理 -->
+		<jaxws:inInterceptors>
+			<bean class="org.apache.cxf.ws.security.wss4j.WSS4JInInterceptor">
+				<constructor-arg>
+					<map>
+						<entry key="action" value="Signature Encrypt" /><!-- 加密/解密方式  -->
+						<entry key="signaturePropFile" value="org/goffee/cxf/server/ca/server.properties" />
+						<entry key="decryptionPropFile" value="org/goffee/cxf/server/ca/server.properties" />
+						<entry key="passwordCallbackClass" value="org.goffee.cxf.server.callback.UTPasswordServerCallBack" />
+						
+					</map>
+				</constructor-arg>
+			</bean>
+		</jaxws:inInterceptors>
+		
+		<!-- 通过拦截器将服务端发送给客户端的数据和签名进行加密 -->
+		<jaxws:outInterceptors>
+			<bean class="org.apache.cxf.ws.security.wss4j.WSS4JOutInterceptor">
+				<constructor-arg>
+					<map>
+						<entry key="action" value="Signature Encrypt" /><!-- 加密/解密方式  -->
+						<entry key="user" value="serverprivatekey" /><!-- 服务端证书别名 -->
+						<entry key="signatureUser" value="serverprivatekey" /><!-- 服务端证书别名 -->
+						<entry key="signaturePropFile" value="org/goffee/cxf/server/ca/server.properties" />
+						<entry key="encryptionUser" value="useReqSigCert" /> <!-- 使用useReqSigCert时，则会使用客户端请求证书加密 -->
+						<entry key="decryptionPropFile" value="org/goffee/cxf/server/ca/server.properties" />
+						<entry key="passwordCallbackClass" value="org.goffee.cxf.server.callback.UTPasswordServerCallBack" />
+						
+					</map>
+				</constructor-arg>
+				<property name="allowMTOM" value="true" />
+			</bean>
+		</jaxws:outInterceptors>
+	</jaxws:endpoint>
+	
+</beans>

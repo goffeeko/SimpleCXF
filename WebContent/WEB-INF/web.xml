@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<web-app xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xmlns="http://java.sun.com/xml/ns/javaee"
+	xsi:schemaLocation="http://java.sun.com/xml/ns/javaee http://java.sun.com/xml/ns/javaee/web-app_3_0.xsd"
+	id="WebApp_ID" version="3.0">
+	<display-name>SimpleCXF</display-name>
+
+	<context-param>
+		<param-name>contextConfigLocation</param-name>
+		<!-- CXF配置wssec.xml(可选)，用于配置输出校验的具体信息 -->
+		<param-value>WEB-INF/beans.xml, WEB-INF/wssec.xml</param-value><!-- spring配置文件 -->
+	</context-param>
+	<listener>
+		<listener-class>org.springframework.web.context.ContextLoaderListener</listener-class>
+	</listener>
+	<servlet>
+		<servlet-name>SimpleCXF</servlet-name>
+		<servlet-class>org.apache.cxf.transport.servlet.CXFServlet</servlet-class>
+	</servlet>
+	<servlet-mapping>
+		<servlet-name>SimpleCXF</servlet-name>
+		<url-pattern>/services/*</url-pattern><!-- 匹配services/*后缀url -->
+	</servlet-mapping>
+</web-app>
