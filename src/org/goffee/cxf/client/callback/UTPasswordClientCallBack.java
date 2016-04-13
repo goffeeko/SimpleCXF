@@ -14,6 +14,7 @@ public class UTPasswordClientCallBack implements CallbackHandler {
 		pc.setPassword("keypass");
 		System.out.println("[UTPasswordClientCallBack]Client Identifier=" + pc.getIdentifier());
 		System.out.println("[UTPasswordClientCallBack]Client Password=" + pc.getPassword());
+		System.out.println("[UTPasswordClientCallBack]Client usage=" + pc.getUsage());
 	}
 
 }

@@ -1,14 +1,21 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <beans xmlns="http://www.springframework.org/schema/beans"
-	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:jaxws="http://cxf.apache.org/jaxws"
-	xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd http://cxf.apache.org/jaxws http://cxf.apache.org/schemas/jaxws.xsd">
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" 
+	xmlns:jaxws="http://cxf.apache.org/jaxws"
+	xmlns:cxf="http://cxf.apache.org/core"
+	xsi:schemaLocation="
+	http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd 
+	http://cxf.apache.org/jaxws http://cxf.apache.org/schemas/jaxws.xsd
+	http://cxf.apache.org/core http://cxf.apache.org/schemas/core.xsd
+	">
 	
-	<!-- jar包中自带的cxf文件夹下的*.xml文件 -->
+	<!-- 
+	Starting in CXF 2.4.0, the extensions are loaded internally by CXF automatically 
+	and you do not need to import all the cxf-extension-*.xml file. 
+	You only need to import classpath:META-INF/cxf/cxf.xml. 
+	-->
 	<import resource="classpath:META-INF/cxf/cxf.xml" />
-	<!-- 未知为何找不以下两个自带文件 -->
-	<!-- <import resource="classpath:META-INF/cxf/cxf-extension-soap.xml" /> -->
-	<!-- <import resource="classpath:META-INF/cxf/cxf-servlet.xml" /> -->
-	 
+ 
 	<!-- 配置服务端方法所在的类及数字签名 -->
 	<jaxws:endpoint id="TestWebService" implementor="org.goffee.cxf.server.services.impl.TestWebServiceImpl"
 		address="/wstest">
@@ -21,8 +28,8 @@
 						<entry key="action" value="Signature Encrypt" /><!-- 加密/解密方式  -->
 						<entry key="signaturePropFile" value="org/goffee/cxf/server/ca/server.properties" />
 						<entry key="decryptionPropFile" value="org/goffee/cxf/server/ca/server.properties" />
-						<entry key="passwordCallbackClass" value="org.goffee.cxf.server.callback.UTPasswordServerCallBack" />
-						
+						<entry key="passwordCallbackRef" value-ref="passwordCallback" />
+						<!-- <entry key="passwordCallbackClass" value="org.goffee.cxf.server.callback.UTPasswordServerCallBack" /> -->
 					</map>
 				</constructor-arg>
 			</bean>
@@ -39,8 +46,13 @@
 						<entry key="signaturePropFile" value="org/goffee/cxf/server/ca/server.properties" />
 						<entry key="encryptionUser" value="useReqSigCert" /> <!-- 使用useReqSigCert时，则会使用客户端请求证书加密 -->
 						<entry key="decryptionPropFile" value="org/goffee/cxf/server/ca/server.properties" />
-						<entry key="passwordCallbackClass" value="org.goffee.cxf.server.callback.UTPasswordServerCallBack" />
-						
+						<entry>
+							<key>
+								<value>passwordCallbackRef</value>
+							</key>
+							<ref bean="passwordCallback" />
+						</entry>
+						<!-- <entry key="passwordCallbackClass" value="org.goffee.cxf.server.callback.UTPasswordServerCallBack" /> -->
 					</map>
 				</constructor-arg>
 				<property name="allowMTOM" value="true" />
@@ -48,4 +60,5 @@
 		</jaxws:outInterceptors>
 	</jaxws:endpoint>
 	
+	<bean id="passwordCallback" class="org.goffee.cxf.server.callback.UTPasswordServerCallBack" />
 </beans>

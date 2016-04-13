@@ -10,5 +10,5 @@ public interface TestWebService {
 	
 	// 接口方法的参数最好使用annotation设定接口方法的参数名，不进行设置，默认会在参数前加上“{”等符号（具体符号可能有误），
 	// 这样可能会给客户端调用带来不必要的麻烦,cxf有好几个annotation配置，如果客户端和服务端传递数据复杂类型参数时出现null等情况，一般进行相应annotation配置即可
-	String testMethod(@WebParam(name = "xml") String xml);
+	String testMethod(@WebParam(name = "name") String name);
 }
