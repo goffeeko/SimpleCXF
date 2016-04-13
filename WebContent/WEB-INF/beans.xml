@@ -26,6 +26,8 @@
 				<constructor-arg>
 					<map>
 						<entry key="action" value="Signature Encrypt" /><!-- 加密/解密方式  -->
+						
+						<!-- server.properties -->
 						<entry key="signaturePropFile" value="org/goffee/cxf/server/ca/server.properties" />
 						<entry key="decryptionPropFile" value="org/goffee/cxf/server/ca/server.properties" />
 						<entry key="passwordCallbackRef" value-ref="passwordCallback" />
@@ -40,11 +42,15 @@
 			<bean class="org.apache.cxf.ws.security.wss4j.WSS4JOutInterceptor">
 				<constructor-arg>
 					<map>
-						<entry key="action" value="Signature Encrypt" /><!-- 加密/解密方式  -->
-						<entry key="user" value="serverprivatekey" /><!-- 服务端证书别名 -->
-						<entry key="signatureUser" value="serverprivatekey" /><!-- 服务端证书别名 -->
+						<!-- 加密/解密方式  -->
+						<entry key="action" value="Signature Encrypt" />
+						<!-- 服务端证书别名 -->
+						<entry key="user" value="serverAlias" />
+						<!-- 服务端证书别名 -->
+						<entry key="signatureUser" value="serverAlias" />
 						<entry key="signaturePropFile" value="org/goffee/cxf/server/ca/server.properties" />
-						<entry key="encryptionUser" value="useReqSigCert" /> <!-- 使用useReqSigCert时，则会使用客户端请求证书加密 -->
+						<!-- 使用useReqSigCert时，则会使用客户端请求证书加密 -->
+						<entry key="encryptionUser" value="useReqSigCert" />
 						<entry key="decryptionPropFile" value="org/goffee/cxf/server/ca/server.properties" />
 						<entry>
 							<key>
@@ -55,7 +61,6 @@
 						<!-- <entry key="passwordCallbackClass" value="org.goffee.cxf.server.callback.UTPasswordServerCallBack" /> -->
 					</map>
 				</constructor-arg>
-				<property name="allowMTOM" value="true" />
 			</bean>
 		</jaxws:outInterceptors>
 	</jaxws:endpoint>

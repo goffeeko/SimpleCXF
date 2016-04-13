@@ -11,11 +11,11 @@ import org.goffee.cxf.client.callback.UTPasswordClientCallBack;
 import org.goffee.cxf.server.services.TestWebService;
 
 public class Client {
-	
+		
 	private final static String CA_CLIENT_PROPERTIES_PATH = "org/goffee/cxf/client/ca/client.properties";
-	private final static String CA_CLIENT_ALIAS = "clientprivatekey"; // 客户端证书别名
-	private final static String CA_SERVER_ALIAS = "serverprivatekey"; // 客户端证书别名
-	
+	private final static String CA_CLIENT_ALIAS = "clientAlias"; // 客户端证书别名
+	private final static String CA_SERVER_ALIAS = "serverAlias"; // 服务端证书别名
+		
     /**
      * 调用服务端接口时，先调用该方法，获得服务端接口方法，该方法设置数字签名的加解密信息
      * 

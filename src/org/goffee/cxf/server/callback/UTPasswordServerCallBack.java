@@ -10,11 +10,29 @@ public class UTPasswordServerCallBack implements CallbackHandler {
 
 	@Override
 	public void handle(Callback[] callbacks) throws IOException, UnsupportedCallbackException {
-		WSPasswordCallback pc = (WSPasswordCallback) callbacks[0];
-		pc.setPassword("keypass");
-		System.out.println("[UTPasswordServerCallBack]Client Identifier=" + pc.getIdentifier());
-		System.out.println("[UTPasswordServerCallBack]Client Password=" + pc.getPassword());
-		System.out.println("[UTPasswordServerCallBack]Client usage=" + pc.getUsage());
+
+		for (int i = 0; i < callbacks.length; i++) {
+			WSPasswordCallback pc = (WSPasswordCallback) callbacks[i];
+			
+			String id = pc.getIdentifier();
+			int usage = pc.getUsage();
+
+			if(WSPasswordCallback.DECRYPT == usage){
+				System.out.println("IN DECRYPT");
+				pc.setPassword("serverKeyPassword");
+			}else if(WSPasswordCallback.SIGNATURE == usage){
+				System.out.println("IN SIGNATURE");
+				pc.setPassword("serverKeyPassword");
+			}else if(WSPasswordCallback.USERNAME_TOKEN == usage){
+				System.out.println("IN USERNAME_TOKEN");
+			}
+						
+			String pwd = pc.getPassword();
+			System.out.println("[UTPasswordServerCallBack][" + i + "]Client Identifier=" + id);
+			System.out.println("[UTPasswordServerCallBack][" + i + "]Client Password=" + pwd);
+			System.out.println("[UTPasswordServerCallBack][" + i + "]Client usage=" + usage);
+		}
+
 	}
 
 }
