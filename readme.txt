@@ -1,11 +1,35 @@
 Runtime:
-```
+````````````````````````````````````````````````````````````````````````````````````````
 JAVA Version: JDK6
 Tomcat Version: tomcat 7
 CXF Version: 3.0.9
-```
+````````````````````````````````````````````````````````````````````````````````````````
 
-reference:
+Usage:
+````````````````````````````````````````````````````````````````````````````````````````
+1.run on Server and open this address "http://localhost:8080/SimpleCXF/services" in browse.
+2.run test client(path: "org/goffee/cxf/client/") as java application:
+#TestClient.java
+#TestClientSignatureOnly.java
+#TestClientUsernameTokenOnly.java
+````````````````````````````````````````````````````````````````````````````````````````
+
+Project struct:
+````````````````````````````````````````````````````````````````````````````````````````
+SimpleCXF
+	|-src
+		|-org.goffee.cxf
+			|-client
+				|-ca
+				|-calback
+			|-server
+				|-ca
+				|-callback
+				|-services
+					|-impl
+````````````````````````````````````````````````````````````````````````````````````````	
+
+Reference:
 http://www.ibm.com/developerworks/cn/java/j-jws13.html
 http://blog.csdn.net/wangchsh2008/article/details/6708270
 
@@ -17,12 +41,11 @@ keytool -selfcert -alias myAlias -keystore privatestore.jks -storepass keyStoreP
 keytool -export -alias myAlias -file key.rsa -keystore privatestore.jks -storepass keyStorePassword
 keytool -import -alias myAlias  -file key.rsa -keystore publicstore.jks -storepass keyStorePassword
 ````````````````````````````````````````````````````````````````````````````````````````
+````````````````````````````````````````````````````````````````````````````````````````
+````````````````````````````````````````````````````````````````````````````````````````
 
-
-
-
-
-Using X.509 Certificates SIGNATURE + ENCRYPT / SIGNATURE + DECRYPT
+Demo:
+Using X.509 Certificates SIGNATURE + ENCRYPT / SIGNATURE + DECRYPT [TestClient.java]
 ````````````````````````````````````````````````````````````````````````````````````````
 client for SimpleCXF
 ```
@@ -53,3 +76,28 @@ server CA path:
 /SimpleCXF/src/org/goffee/cxf/server/ca/server.jks
 ````````````````````````````````````````````````````````````````````````````````````````
 
+
+Using X.509 Certificates SIGNATURE [TestClientSignatureOnly.java]
+````````````````````````````````````````````````````````````````````````````````````````
+client CA path:
+/SimpleCXF/src/org/goffee/cxf/client/ca/client_for_signature_only_encrypt.properties
+/SimpleCXF/src/org/goffee/cxf/client/ca/client_for_signature_only_sgin.properties
+/SimpleCXF/src/org/goffee/cxf/client/ca/client-keystore.jks
+/SimpleCXF/src/org/goffee/cxf/client/ca/client-truststore.jks
+
+server CA path:
+/SimpleCXF/src/org/goffee/cxf/server/ca/server_for_signature_only_decrypt.properties
+/SimpleCXF/src/org/goffee/cxf/server/ca/server_for_signature_only_sign.properties
+/SimpleCXF/src/org/goffee/cxf/server/ca/server-keystore.jks
+/SimpleCXF/src/org/goffee/cxf/server/ca/server-truststore.jks
+````````````````````````````````````````````````````````````````````````````````````````
+
+
+Using UsernameToken [TestClientUsernameTokenOnly.java]
+````````````````````````````````````````````````````````````````````````````````````````
+client CA path:
+N/A
+
+server CA path:
+N/A
+````````````````````````````````````````````````````````````````````````````````````````

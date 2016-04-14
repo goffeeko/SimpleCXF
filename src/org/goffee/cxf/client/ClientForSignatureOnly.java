@@ -4,18 +4,15 @@ import java.util.HashMap;
 import java.util.Map;
 
 import org.apache.cxf.jaxws.JaxWsProxyFactoryBean;
-import org.apache.cxf.ws.security.wss4j.WSS4JInInterceptor;
 import org.apache.cxf.ws.security.wss4j.WSS4JOutInterceptor;
 import org.apache.wss4j.dom.handler.WSHandlerConstants;
-import org.goffee.cxf.client.callback.UTPasswordClientCallBack;
+import org.goffee.cxf.client.callback.UTPasswordClientSignatureOnlyCallBack;
 import org.goffee.cxf.server.services.HelloWorldService;
 
 public class ClientForSignatureOnly {
 		
-	private final static String CA_CLIENT_PROPERTIES_PATH = "org/goffee/cxf/client/ca/client_for_signature_only.properties";
-	private final static String CA_CLIENT_ALIAS = "clientAlias"; // 客户端证书别名
-//	private final static String CA_SERVER_ALIAS = "serverAlias"; // 服务端证书别名
-		
+	private final static String CA_CLIENT_ENCRYPT_SIGN_PATH = "org/goffee/cxf/client/ca/client_for_signature_only_sgin.properties";
+	private final static String SIGN_USER = "clientx509v1";
     /**
      * 调用服务端接口时，先调用该方法，获得服务端接口方法，该方法设置数字签名的加解密信息
      * 
@@ -37,20 +34,14 @@ public class ClientForSignatureOnly {
         System.out.println("Set client request to server");
         Map<String, Object> outProps = new HashMap<String, Object>();        
         outProps.put(WSHandlerConstants.ACTION, WSHandlerConstants.SIGNATURE);
-        outProps.put(WSHandlerConstants.USER, CA_CLIENT_ALIAS);
-        outProps.put(WSHandlerConstants.PW_CALLBACK_CLASS, UTPasswordClientCallBack.class.getName());
-        outProps.put(WSHandlerConstants.SIG_PROP_FILE, CA_CLIENT_PROPERTIES_PATH);
+        outProps.put(WSHandlerConstants.PW_CALLBACK_CLASS, UTPasswordClientSignatureOnlyCallBack.class.getName());
+        outProps.put(WSHandlerConstants.SIGNATURE_USER, SIGN_USER);
+        outProps.put(WSHandlerConstants.SIG_PROP_FILE, CA_CLIENT_ENCRYPT_SIGN_PATH);
         WSS4JOutInterceptor outInterceptor = new WSS4JOutInterceptor(outProps);
         factory.getOutInterceptors().add(outInterceptor);
         
         // 服务端响应客户端请求时，客户端对服务端签名和加密进行处理，对应服务端响应拦截器
         System.out.println("Set server response to client");
-        Map<String, Object> inProps = new HashMap<String, Object>();
-        inProps.put(WSHandlerConstants.ACTION, WSHandlerConstants.SIGNATURE);
-        inProps.put(WSHandlerConstants.PW_CALLBACK_CLASS, UTPasswordClientCallBack.class.getName());
-        inProps.put(WSHandlerConstants.DEC_PROP_FILE, CA_CLIENT_PROPERTIES_PATH);
-        inProps.put(WSHandlerConstants.SIG_PROP_FILE, CA_CLIENT_PROPERTIES_PATH);
-        factory.getInInterceptors().add(new WSS4JInInterceptor(inProps));
         HelloWorldService webService = (HelloWorldService) factory.create();
         return webService;
     }

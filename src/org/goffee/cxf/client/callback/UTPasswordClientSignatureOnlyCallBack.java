@@ -1,6 +1,9 @@
 package org.goffee.cxf.client.callback;
 
 import java.io.IOException;
+import java.util.HashMap;
+import java.util.Map;
+
 import javax.security.auth.callback.Callback;
 import javax.security.auth.callback.CallbackHandler;
 import javax.security.auth.callback.UnsupportedCallbackException;
@@ -8,26 +11,36 @@ import org.apache.wss4j.common.ext.WSPasswordCallback;
 
 public class UTPasswordClientSignatureOnlyCallBack implements CallbackHandler {
 
+	private Map<String, String> passwords = new HashMap<String, String>();
+	
+	public UTPasswordClientSignatureOnlyCallBack() {
+        passwords.put("Alice", "ecilA");
+        passwords.put("abcd", "dcba");
+        passwords.put("clientx509v1", "storepassword");
+        passwords.put("serverx509v1", "storepassword");
+    }
+	
 	@Override
 	public void handle(Callback[] callbacks) throws IOException, UnsupportedCallbackException {
-		WSPasswordCallback pc = (WSPasswordCallback) callbacks[0];
+		
+		for (int i = 0; i < callbacks.length; i++) {
+            WSPasswordCallback pc = (WSPasswordCallback)callbacks[i];
+            String pass = passwords.get(pc.getIdentifier());
+            if (pass != null) {
+                pc.setPassword(pass);
 
-		switch (pc.getUsage()) {
-		case WSPasswordCallback.SIGNATURE:
-			pc.setPassword("clientKeyPassword");
-			System.out.println("[client][callback]SIGNATURE");
-			break;
-		case WSPasswordCallback.DECRYPT:
-			pc.setPassword("clientKeyPassword");
-			System.out.println("[client][callback]DECRYPT");
-			break;
-		default:
-			break;
-		}
-			
-		System.out.println("[UTPasswordClientCallBack]Client Identifier=" + pc.getIdentifier());
-		System.out.println("[UTPasswordClientCallBack]Client Password=" + pc.getPassword());
-		System.out.println("[UTPasswordClientCallBack]Client usage=" + pc.getUsage());
+                System.out.println("[UTPasswordClientCallBack]Client Identifier=" + pc.getIdentifier());
+        		System.out.println("[UTPasswordClientCallBack]Client Password=" + pc.getPassword());
+        		System.out.println("[UTPasswordClientCallBack]Client usage=" + pc.getUsage());
+                return;
+            }
+        }
 	}
 
+	/**
+     * Add an alias/password pair to the callback mechanism.
+     */
+    public void setAliasPassword(String alias, String password) {
+        passwords.put(alias, password);
+    }
 }
