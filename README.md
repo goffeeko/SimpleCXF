@@ -57,7 +57,7 @@ N/A
 ````````````````````````````````````````````````````````````````````````````````````````
 
 
-<h4>Using X.509 Certificates SIGNATURE [TestClientSignatureOnly.java]</4>
+<h4>Using X.509 Certificates SIGNATURE [TestClientSignatureOnly.java]</h4>
 ````````````````````````````````````````````````````````````````````````````````````````
 client CA path:
 /SimpleCXF/src/org/goffee/cxf/client/ca/client_for_signature_only_encrypt.properties
