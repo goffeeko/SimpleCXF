@@ -3,6 +3,7 @@
 JAVA Version: JDK6
 Tomcat Version: tomcat 7
 CXF Version: 3.0.9
+IDE: Eclipse Java EE IDE for Web Developers [Mars.2 Release](4.5.2)
 ```
 
 <h1>Usage</h1>
