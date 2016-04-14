@@ -15,7 +15,34 @@
 	You only need to import classpath:META-INF/cxf/cxf.xml. 
 	-->
 	<import resource="classpath:META-INF/cxf/cxf.xml" />
- 
+ 	
+ 	
+ 	
+ 	
+ 	<!-- usernameToken -->
+ 	<jaxws:endpoint address="/sayHi" id="sayHi"
+		implementor="org.goffee.cxf.server.services.impl.SayHiServiceImpl">
+		<jaxws:properties>
+			<entry key="ws-security.callback-handler" value-ref="passwordCallback" />
+		</jaxws:properties>
+		<!--Added interceptor below -->
+		<jaxws:inInterceptors>
+			<bean class="org.apache.cxf.ws.security.wss4j.WSS4JInInterceptor">
+				<constructor-arg>
+					<map>
+						<entry key="action" value="UsernameToken" />
+						<entry key="passwordType" value="PasswordText" />
+						<entry key="passwordCallbackRef">
+							<ref bean="passwordCallback" />
+						</entry>
+					</map>
+				</constructor-arg>
+			</bean>
+		</jaxws:inInterceptors>
+	</jaxws:endpoint> 
+ 	
+ 	
+ 	
  	<!-- 配置服务端方法所在的类及数字签名 signature only -->
 	<jaxws:endpoint id="HelloWorldService" implementor="org.goffee.cxf.server.services.impl.HelloWorldServiceImpl"
 		address="/helloworld">
