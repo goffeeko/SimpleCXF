@@ -41,8 +41,6 @@ keytool -selfcert -alias myAlias -keystore privatestore.jks -storepass keyStoreP
 keytool -export -alias myAlias -file key.rsa -keystore privatestore.jks -storepass keyStorePassword
 keytool -import -alias myAlias  -file key.rsa -keystore publicstore.jks -storepass keyStorePassword
 ````````````````````````````````````````````````````````````````````````````````````````
-````````````````````````````````````````````````````````````````````````````````````````
-````````````````````````````````````````````````````````````````````````````````````````
 
 <h1>Demo</h1>
 
@@ -60,46 +58,46 @@ N/A
 <h4>Using X.509 Certificates SIGNATURE [TestClientSignatureOnly.java]</h4>
 ````````````````````````````````````````````````````````````````````````````````````````
 client CA path:
-/SimpleCXF/src/org/goffee/cxf/client/ca/client_for_signature_only_encrypt.properties
-/SimpleCXF/src/org/goffee/cxf/client/ca/client_for_signature_only_sgin.properties
-/SimpleCXF/src/org/goffee/cxf/client/ca/client-keystore.jks
-/SimpleCXF/src/org/goffee/cxf/client/ca/client-truststore.jks
+SimpleCXF/src/org/goffee/cxf/client/ca/client_for_signature_only_encrypt.properties
+SimpleCXF/src/org/goffee/cxf/client/ca/client_for_signature_only_sgin.properties
+SimpleCXF/src/org/goffee/cxf/client/ca/client-keystore.jks
+SimpleCXF/src/org/goffee/cxf/client/ca/client-truststore.jks
 
 server CA path:
-/SimpleCXF/src/org/goffee/cxf/server/ca/server_for_signature_only_decrypt.properties
-/SimpleCXF/src/org/goffee/cxf/server/ca/server_for_signature_only_sign.properties
-/SimpleCXF/src/org/goffee/cxf/server/ca/server-keystore.jks
-/SimpleCXF/src/org/goffee/cxf/server/ca/server-truststore.jks
+SimpleCXF/src/org/goffee/cxf/server/ca/server_for_signature_only_decrypt.properties
+SimpleCXF/src/org/goffee/cxf/server/ca/server_for_signature_only_sign.properties
+SimpleCXF/src/org/goffee/cxf/server/ca/server-keystore.jks
+SimpleCXF/src/org/goffee/cxf/server/ca/server-truststore.jks
 ````````````````````````````````````````````````````````````````````````````````````````
 
 
 <h4>Using X.509 Certificates with USERNAME_TOKEN + TIMESTAMP + SIGNATURE + ENCRYPT [TestClient.java]</h4>
-````````````````````````````````````````````````````````````````````````````````````````
-client for SimpleCXF
+
+<b>client for SimpleCXF</b>
 ```
 keytool -genkey -alias clientAlias -keypass clientKeyPassword -keystore clientKeyStore.jks -storepass clientStorePassword -dname "cn=clientAlias" -keyalg RSA
 keytool -selfcert -alias clientAlias -keystore clientKeyStore.jks -storepass clientStorePassword -keypass clientKeyPassword
 keytool -export -alias clientAlias -file clientKeyStore.rsa -keystore clientKeyStore.jks -storepass clientStorePassword
 ```
 
-server for SimpleCXF
+<b>server for SimpleCXF</b>
 ```
 keytool -genkey -alias serverAlias -keypass serverKeyPassword -keystore serverKeyStore.jks -storepass serverStorePassword -dname "cn=serverAlias" -keyalg RSA
 keytool -selfcert -alias serverAlias -keystore serverKeyStore.jks -storepass serverStorePassword -keypass serverKeyPassword
 keytool -export -alias serverAlias -file serverKeyStore.rsa -keystore serverKeyStore.jks -storepass serverStorePassword
 ```
 
-import
+<b>import</b>
 ``` 
 keytool -import -alias serverAlias -file serverKeyStore.rsa -keystore clientKeyStore.jks -storepass clientStorePassword
 keytool -import -alias clientAlias -file clientKeyStore.rsa -keystore serverKeyStore.jks -storepass serverStorePassword
 ```
-
+```
 client CA path:
-/SimpleCXF/src/org/goffee/cxf/client/ca/client.properties
-/SimpleCXF/src/org/goffee/cxf/client/ca/client.jks
+SimpleCXF/src/org/goffee/cxf/client/ca/client.properties
+SimpleCXF/src/org/goffee/cxf/client/ca/client.jks
 
 server CA path:
-/SimpleCXF/src/org/goffee/cxf/server/ca/server.properties
-/SimpleCXF/src/org/goffee/cxf/server/ca/server.jks
-````````````````````````````````````````````````````````````````````````````````````````
+SimpleCXF/src/org/goffee/cxf/server/ca/server.properties
+SimpleCXF/src/org/goffee/cxf/server/ca/server.jks
+```
