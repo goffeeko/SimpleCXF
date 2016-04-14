@@ -17,9 +17,6 @@ public class UTPasswordServerCallBack implements CallbackHandler {
 			String id = pc.getIdentifier();
 			int usage = pc.getUsage();
 
-			System.out.println("[UTPasswordServerCallBack][" + i + "]Client Identifier=" + id);
-			System.out.println("[UTPasswordServerCallBack][" + i + "]Client usage=" + usage);
-			
 			if(WSPasswordCallback.DECRYPT == usage){
 				System.out.println("IN DECRYPT");
 				pc.setPassword("serverKeyPassword");
@@ -34,6 +31,8 @@ public class UTPasswordServerCallBack implements CallbackHandler {
 			}
 						
 			String pwd = pc.getPassword();
+			System.out.println("[UTPasswordServerCallBack][" + i + "]Client Identifier=" + id);
+			System.out.println("[UTPasswordServerCallBack][" + i + "]Client usage=" + usage);
 			System.out.println("[UTPasswordServerCallBack][" + i + "]Client Password=" + pwd);
 			
 		}

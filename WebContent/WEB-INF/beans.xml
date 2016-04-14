@@ -19,9 +19,11 @@
  	<!-- usernameToken -->
  	<jaxws:endpoint address="/sayHi" id="sayHi"
 		implementor="org.goffee.cxf.server.services.impl.SayHiServiceImpl">
+		
 		<jaxws:properties>
 			<entry key="ws-security.callback-handler" value-ref="passwordCallback" />
 		</jaxws:properties>
+		
 		<!--Added interceptor below -->
 		<jaxws:inInterceptors>
 			<bean class="org.apache.cxf.ws.security.wss4j.WSS4JInInterceptor">
@@ -29,13 +31,12 @@
 					<map>
 						<entry key="action" value="UsernameToken" />
 						<entry key="passwordType" value="PasswordText" />
-						<entry key="passwordCallbackRef">
-							<ref bean="passwordCallback" />
-						</entry>
+						<entry key="passwordCallbackRef" value-ref="passwordCallback" />
 					</map>
 				</constructor-arg>
 			</bean>
 		</jaxws:inInterceptors>
+		
 	</jaxws:endpoint> 
  	
  	<!-- 配置服务端方法所在的类及数字签名 signature only -->
@@ -53,9 +54,8 @@
 				</constructor-arg>
 			</bean>
 		</jaxws:inInterceptors>
+		
 	</jaxws:endpoint>
- 
- 
  
 	<!-- 配置服务端方法所在的类及数字签名 -->
 	<jaxws:endpoint id="TestWebService" implementor="org.goffee.cxf.server.services.impl.TestWebServiceImpl"
@@ -66,13 +66,12 @@
 			<bean class="org.apache.cxf.ws.security.wss4j.WSS4JInInterceptor">
 				<constructor-arg>
 					<map>
-						<entry key="action" value="Signature Encrypt" /><!-- 加密/解密方式  -->
-						
+						<entry key="action" value="UsernameToken Timestamp Signature Encrypt" /><!-- 加密/解密方式  -->
+						<entry key="passwordType" value="PasswordText" />
 						<!-- server.properties -->
 						<entry key="signaturePropFile" value="org/goffee/cxf/server/ca/server.properties" />
 						<entry key="decryptionPropFile" value="org/goffee/cxf/server/ca/server.properties" />
 						<entry key="passwordCallbackRef" value-ref="passwordCallback" />
-						<!-- <entry key="passwordCallbackClass" value="org.goffee.cxf.server.callback.UTPasswordServerCallBack" /> -->
 					</map>
 				</constructor-arg>
 			</bean>
@@ -84,32 +83,19 @@
 				<constructor-arg>
 					<map>
 						<!-- 加密/解密方式  -->
-						<entry key="action" value="Signature Encrypt" />
-						<!-- 服务端证书别名 -->
-						<entry key="user" value="serverAlias" />
+						<entry key="action" value="Timestamp Signature Encrypt" />
 						<!-- 服务端证书别名 -->
 						<entry key="signatureUser" value="serverAlias" />
 						<entry key="signaturePropFile" value="org/goffee/cxf/server/ca/server.properties" />
 						<!-- 使用useReqSigCert时，则会使用客户端请求证书加密 -->
 						<entry key="encryptionUser" value="useReqSigCert" />
-						<entry key="decryptionPropFile" value="org/goffee/cxf/server/ca/server.properties" />
-						<entry>
-							<key>
-								<value>passwordCallbackRef</value>
-							</key>
-							<ref bean="passwordCallback" />
-						</entry>
-						<!-- <entry key="passwordCallbackClass" value="org.goffee.cxf.server.callback.UTPasswordServerCallBack" /> -->
+						<entry key="passwordCallbackRef" value-ref="passwordCallback" />
 					</map>
 				</constructor-arg>
 			</bean>
 		</jaxws:outInterceptors>
+		
 	</jaxws:endpoint>
-	
-	
-	
-	
-	
 	
 	<bean id="passwordCallback" class="org.goffee.cxf.server.callback.UTPasswordServerCallBack" />
 </beans>

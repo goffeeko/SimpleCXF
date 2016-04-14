@@ -21,6 +21,9 @@ public class UTPasswordClientCallBack implements CallbackHandler {
 			pc.setPassword("clientKeyPassword");
 			System.out.println("[client][callback]DECRYPT");
 			break;
+		case WSPasswordCallback.USERNAME_TOKEN:
+			System.out.println("[client][callback]USERNAME_TOKEN");
+			pc.setPassword("password");
 		default:
 			break;
 		}
