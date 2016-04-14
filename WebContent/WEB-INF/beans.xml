@@ -16,6 +16,57 @@
 	-->
 	<import resource="classpath:META-INF/cxf/cxf.xml" />
  
+ 	<!-- 配置服务端方法所在的类及数字签名 signature only -->
+	<jaxws:endpoint id="HelloWorldService" implementor="org.goffee.cxf.server.services.impl.HelloWorldServiceImpl"
+		address="/helloworld">
+		
+		<!-- 通过拦截器对客户端发送的数据和签名进行解密处理 -->
+		<jaxws:inInterceptors>
+			<bean class="org.apache.cxf.ws.security.wss4j.WSS4JInInterceptor">
+				<constructor-arg>
+					<map>
+						<entry key="action" value="Signature" /><!-- 加密/解密方式  -->
+						
+						<!-- server.properties -->
+						<entry key="signaturePropFile" value="org/goffee/cxf/server/ca/server_for_signature_only.properties" />
+						<entry key="decryptionPropFile" value="org/goffee/cxf/server/ca/server_for_signature_only.properties" />
+						<entry key="passwordCallbackRef" value-ref="passwordCallback" />
+						<!-- <entry key="passwordCallbackClass" value="org.goffee.cxf.server.callback.UTPasswordServerCallBack" /> -->
+					</map>
+				</constructor-arg>
+			</bean>
+		</jaxws:inInterceptors>
+		
+		<!-- 通过拦截器将服务端发送给客户端的数据和签名进行加密 -->
+		<jaxws:outInterceptors>
+			<bean class="org.apache.cxf.ws.security.wss4j.WSS4JOutInterceptor">
+				<constructor-arg>
+					<map>
+						<!-- 加密/解密方式  -->
+						<entry key="action" value="Signature" />
+						<!-- 服务端证书别名 -->
+						<entry key="user" value="serverAlias" />
+						<!-- 服务端证书别名 -->
+						<entry key="signatureUser" value="serverAlias" />
+						<entry key="signaturePropFile" value="org/goffee/cxf/server/ca/server_for_signature_only.properties" />
+						<!-- 使用useReqSigCert时，则会使用客户端请求证书加密 -->
+						<entry key="encryptionUser" value="useReqSigCert" />
+						<entry key="decryptionPropFile" value="org/goffee/cxf/server/ca/server_for_signature_only.properties" />
+						<entry>
+							<key>
+								<value>passwordCallbackRef</value>
+							</key>
+							<ref bean="passwordCallback" />
+						</entry>
+						<!-- <entry key="passwordCallbackClass" value="org.goffee.cxf.server.callback.UTPasswordServerCallBack" /> -->
+					</map>
+				</constructor-arg>
+			</bean>
+		</jaxws:outInterceptors>
+	</jaxws:endpoint>
+ 
+ 
+ 
 	<!-- 配置服务端方法所在的类及数字签名 -->
 	<jaxws:endpoint id="TestWebService" implementor="org.goffee.cxf.server.services.impl.TestWebServiceImpl"
 		address="/wstest">
@@ -64,6 +115,11 @@
 			</bean>
 		</jaxws:outInterceptors>
 	</jaxws:endpoint>
+	
+	
+	
+	
+	
 	
 	<bean id="passwordCallback" class="org.goffee.cxf.server.callback.UTPasswordServerCallBack" />
 </beans>
