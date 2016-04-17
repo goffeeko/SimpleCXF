@@ -22,7 +22,14 @@ public class UTPasswordServerCallBack implements CallbackHandler {
 				pc.setPassword("serverKeyPassword");
 			}else if(WSPasswordCallback.SIGNATURE == usage){
 				System.out.println("IN SIGNATURE");
-				pc.setPassword("serverKeyPassword");
+				
+				//serverx509v1 for example: TestClientSignatureOnly.java
+				if("serverx509v1".equals(id)){
+					pc.setPassword("storepassword");
+				}else{
+					//for example: TestClient.java
+					pc.setPassword("serverKeyPassword");
+				}
 			}else if(WSPasswordCallback.USERNAME_TOKEN == usage){
 				System.out.println("IN USERNAME_TOKEN");
 				if ("goffee".equals(id)) {

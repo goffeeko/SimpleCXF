@@ -15,6 +15,11 @@ IDE: Eclipse Java EE IDE for Web Developers [Mars.2 Release](4.5.2)
 #TestClientUsernameTokenOnly.java
 ```
 
+<h1>Note</h1>
+```
+if missing lib folder in WebContent/WEB-INF/ , please create new one.
+```
+
 <h1>Project struct</h1>
 ```
 SimpleCXF
@@ -60,6 +65,13 @@ N/A
 
 
 <h4>Using X.509 Certificates SIGNATURE [TestClientSignatureOnly.java]</h4>
+
+```
+Please reference CXF lib example:
+ samples/ws_security/sign_enc/src/main/java/demo/wssec/client/Client.java
+ samples/ws_security/sign_enc/src/main/java/demo/wssec/server/Server.java
+```
+
 ```
 client CA path:
 SimpleCXF/src/org/goffee/cxf/client/ca/client_for_signature_only_encrypt.properties

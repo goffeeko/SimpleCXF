@@ -4,14 +4,21 @@ import java.util.HashMap;
 import java.util.Map;
 
 import org.apache.cxf.jaxws.JaxWsProxyFactoryBean;
+import org.apache.cxf.ws.security.wss4j.WSS4JInInterceptor;
 import org.apache.cxf.ws.security.wss4j.WSS4JOutInterceptor;
 import org.apache.wss4j.dom.handler.WSHandlerConstants;
 import org.goffee.cxf.client.callback.UTPasswordClientSignatureOnlyCallBack;
 import org.goffee.cxf.server.services.HelloWorldService;
 
+/*
+ * Please reference CXF lib example:
+ * samples/ws_security/sign_enc/src/main/java/demo/wssec/client/Client.java
+ * samples/ws_security/sign_enc/src/main/java/demo/wssec/server/Server.java
+ * */
 public class ClientForSignatureOnly {
 		
 	private final static String CA_CLIENT_ENCRYPT_SIGN_PATH = "org/goffee/cxf/client/ca/client_for_signature_only_sgin.properties";
+	private final static String CA_CLIENT_ENCRYPT_ENCRYPT_PATH = "org/goffee/cxf/client/ca/client_for_signature_only_encrypt.properties";
 	private final static String SIGN_USER = "clientx509v1";
     /**
      * 调用服务端接口时，先调用该方法，获得服务端接口方法，该方法设置数字签名的加解密信息
@@ -42,6 +49,11 @@ public class ClientForSignatureOnly {
         
         // 服务端响应客户端请求时，客户端对服务端签名和加密进行处理，对应服务端响应拦截器
         System.out.println("Set server response to client");
+        Map<String, Object> inProps = new HashMap<String, Object>();
+        inProps.put(WSHandlerConstants.ACTION, WSHandlerConstants.SIGNATURE);
+        inProps.put(WSHandlerConstants.SIG_PROP_FILE, CA_CLIENT_ENCRYPT_ENCRYPT_PATH);
+        factory.getInInterceptors().add(new WSS4JInInterceptor(inProps));
+        
         HelloWorldService webService = (HelloWorldService) factory.create();
         return webService;
     }

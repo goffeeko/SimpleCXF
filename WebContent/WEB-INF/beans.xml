@@ -55,6 +55,23 @@
 			</bean>
 		</jaxws:inInterceptors>
 		
+		<!-- 通过拦截器将服务端发送给客户端的数据和签名进行加密 -->
+		<jaxws:outInterceptors>
+			<bean class="org.apache.cxf.ws.security.wss4j.WSS4JOutInterceptor">
+				<constructor-arg>
+					<map>
+						<!-- 加密/解密方式  -->
+						<entry key="action" value="Signature" />
+						<!-- 服务端证书别名 -->
+						<entry key="signatureUser" value="serverx509v1" />
+						<entry key="signaturePropFile" value="org/goffee/cxf/server/ca/server_for_signature_only_decrypt.properties" />
+						<!-- 使用useReqSigCert时，则会使用客户端请求证书加密 -->
+						<entry key="passwordCallbackRef" value-ref="passwordCallback" />
+					</map>
+				</constructor-arg>
+			</bean>
+		</jaxws:outInterceptors>
+		
 	</jaxws:endpoint>
  
 	<!-- 配置服务端方法所在的类及数字签名 -->
